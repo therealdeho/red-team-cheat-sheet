@@ -50,5 +50,9 @@ set disassembly-flavor intel
 #print 15 instructions from main
 x/15i main
 
-$print string at address
+#print string at address
 x/1s 0xFFFFF
+
+#mapped address spaces
+i proc m
+
