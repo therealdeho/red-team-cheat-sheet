@@ -47,6 +47,9 @@ put commands in ~/.gdbinit
 #set gdb to intel syntax
 set disassembly-flavor intel
 
+#follow child during a fork (gdb default is parent)
+set follow-fork-mode child
+
 #print 15 instructions from main
 x/15i main
 
