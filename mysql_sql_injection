@@ -1,5 +1,8 @@
 #shout out: http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet
 
+#other good links to integrate:
+https://rawsec.ml/en/0CTF-2017-write-ups/#simplesqlin-web
+
 #Version
 SELECT @@version
 
